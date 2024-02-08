@@ -1,16 +1,26 @@
-import React from 'react';
-import { View, Text, Image, StyleSheet } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, Image, StyleSheet, Pressable } from 'react-native';
 import { Stack, useLocalSearchParams } from 'expo-router';
 
 import products from '@/assets/data/products';
+import Button from '@/src/components/Button';
 import { defaultProductImage } from '@/src/components/ProductListItem';
+
+const sizes = ['S', 'M', 'L', 'XL'];
 
 const ProductDetailPage = () => {
   const { id } = useLocalSearchParams();
 
-  const sizes = ['S', 'M', 'L', 'XL'];
+  const [selectedSize, setSelectedSize] = useState<string>();
 
   const product = products.find(p => p.id.toString() === id);
+
+  const addToCart = () => {
+    if (!selectedSize) {
+      return;
+    }
+    console.log(`Added ${selectedSize} ${product?.name} to cart`);
+  };
 
   if (!product) {
     return (
@@ -31,12 +41,27 @@ const ProductDetailPage = () => {
       <Text>Select Size</Text>
       <View style={styles.sizes}>
         {sizes.map(size => (
-          <View key={size} style={styles.size}>
-            <Text style={styles.sizeText}>{size}</Text>
-          </View>
+          <Pressable
+            onPress={() => setSelectedSize(size)}
+            key={size}
+            style={[
+              styles.size,
+              {
+                backgroundColor: selectedSize === size ? 'gainsboro' : 'white',
+              },
+            ]}>
+            <Text
+              style={[
+                styles.sizeText,
+                { color: selectedSize === size ? 'black' : 'gray' },
+              ]}>
+              {size}
+            </Text>
+          </Pressable>
         ))}
       </View>
       <Text style={styles.price}>${product.price}</Text>
+      <Button onPress={addToCart} text="Add to Cart" />
     </View>
   );
 };
@@ -53,7 +78,11 @@ const styles = StyleSheet.create({
     width: '100%',
     aspectRatio: 1,
   },
-  price: { fontSize: 20, fontWeight: 'bold' },
+  price: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginTop: 'auto',
+  },
   sizes: {
     flexDirection: 'row',
     justifyContent: 'space-around',
