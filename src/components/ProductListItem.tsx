@@ -1,4 +1,4 @@
-import { StyleSheet, View, Text, Image } from 'react-native';
+import { StyleSheet, View, Text, Image, Pressable } from 'react-native';
 
 import Colors from '@/src/constants/Colors';
 import { Product } from '@/src/types';
@@ -13,28 +13,19 @@ export const defaultProductImage =
 
 const ProductListItem = ({ product }: ProductListItemProps) => {
   return (
-    <View style={styles.container}>
-      <Image
-        source={{ uri: product.image || defaultProductImage }}
-        style={styles.image}
-        resizeMode="contain"
-      />
-      <Text style={styles.title}>{product.name}</Text>
-      <Text style={styles.price}>${product.price}</Text>
-      <Link
-        href={`/product`}
-        style={{
-          marginTop: 10,
-          width: '100%',
-          alignItems: 'center',
-          justifyContent: 'center',
-          backgroundColor: Colors.light.tint,
-          padding: 10,
-          borderRadius: 10,
-        }}>
+    //@ts-ignore
+    <Link href={`/menu/${product.id}`} asChild>
+      <Pressable style={styles.container}>
+        <Image
+          source={{ uri: product.image || defaultProductImage }}
+          style={styles.image}
+          resizeMode="contain"
+        />
+        <Text style={styles.title}>{product.name}</Text>
+        <Text style={styles.price}>${product.price}</Text>
         <Text style={{ color: 'white', fontWeight: 'bold' }}>View</Text>
-      </Link>
-    </View>
+      </Pressable>
+    </Link>
   );
 };
 
