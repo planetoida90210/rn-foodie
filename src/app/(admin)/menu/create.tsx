@@ -5,13 +5,17 @@ import * as ImagePicker from 'expo-image-picker';
 import Button from '@/src/components/Button';
 import { defaultProductImage } from '@/src/components/ProductListItem';
 import Colors from '@/src/constants/Colors';
-import { Stack } from 'expo-router';
+import { Stack, useLocalSearchParams } from 'expo-router';
 
 const CreateProductScreen = () => {
   const [name, setName] = useState<string>('');
   const [price, setPrice] = useState<string>('');
   const [errors, setErrors] = useState<string[]>([]);
   const [image, setImage] = useState<string | null>(null);
+
+  const { id } = useLocalSearchParams();
+
+  const isUpdate = !!id;
 
   const resetFields = () => {
     setName('');
@@ -65,7 +69,9 @@ const CreateProductScreen = () => {
 
   return (
     <View style={styles.container}>
-      <Stack.Screen options={{ title: 'Create Product' }} />
+      <Stack.Screen
+        options={{ title: isUpdate ? 'Update Product' : 'Create Product' }}
+      />
       <Image
         source={{ uri: image || defaultProductImage }}
         style={styles.image}
@@ -89,7 +95,7 @@ const CreateProductScreen = () => {
         keyboardType="numeric"
       />
       <Text style={{ color: 'red' }}>{errors.join(', ')}</Text>
-      <Button onPress={onCreate} text="Create" />
+      <Button onPress={onCreate} text={isUpdate ? 'Update' : 'Create'} />
     </View>
   );
 };
