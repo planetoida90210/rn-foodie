@@ -43,6 +43,15 @@ const CreateProductScreen = () => {
 
     return true;
   };
+
+  const onSubmit = () => {
+    if (isUpdate) {
+      onUpdate();
+    } else {
+      onCreate();
+    }
+  };
+
   const onCreate = () => {
     console.warn('Create');
     if (!validateInput()) {
@@ -51,6 +60,13 @@ const CreateProductScreen = () => {
 
     //TODO: save in the database
     resetFields();
+  };
+
+  const onUpdate = () => {
+    console.warn('Update');
+    if (!validateInput()) {
+      return;
+    }
   };
 
   const pickImage = async () => {
@@ -95,7 +111,7 @@ const CreateProductScreen = () => {
         keyboardType="numeric"
       />
       <Text style={{ color: 'red' }}>{errors.join(', ')}</Text>
-      <Button onPress={onCreate} text={isUpdate ? 'Update' : 'Create'} />
+      <Button onPress={onSubmit} text={isUpdate ? 'Update' : 'Create'} />
     </View>
   );
 };
