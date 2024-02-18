@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, TextInput, Image } from 'react-native';
+import { View, Text, StyleSheet, TextInput, Image, Alert } from 'react-native';
 import React, { useState } from 'react';
 import * as ImagePicker from 'expo-image-picker';
 
@@ -63,10 +63,29 @@ const CreateProductScreen = () => {
   };
 
   const onUpdate = () => {
-    console.warn('Update');
     if (!validateInput()) {
       return;
     }
+    console.warn('Update');
+    resetFields();
+  };
+
+  const onDelete = () => {
+    console.warn('Delete');
+  };
+
+  const confirmDelete = () => {
+    Alert.alert(
+      'Delete Product',
+      'Are you sure you want to delete this product?',
+      [
+        {
+          text: 'Cancel',
+          style: 'cancel',
+        },
+        { text: 'OK', onPress: onDelete },
+      ],
+    );
   };
 
   const pickImage = async () => {
@@ -112,6 +131,11 @@ const CreateProductScreen = () => {
       />
       <Text style={{ color: 'red' }}>{errors.join(', ')}</Text>
       <Button onPress={onSubmit} text={isUpdate ? 'Update' : 'Create'} />
+      {isUpdate && (
+        <Text onPress={confirmDelete} style={styles.textButton}>
+          Delete
+        </Text>
+      )}
     </View>
   );
 };
